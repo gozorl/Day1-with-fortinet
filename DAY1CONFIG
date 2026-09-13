@@ -116,7 +116,7 @@ ip dhcp pool IPCCTV
    domain-name IPCCTV.COM
    dns-server 10.41.1.10
 ip dhcp pool VOICEVLAN
-   network 10..100.0 255.255.255.0
+   network 10.41.100.0 255.255.255.0
    default-router 10.41.100.4
    domain-name VOICEVLAN.COM
    dns-server 10.41.1.10
