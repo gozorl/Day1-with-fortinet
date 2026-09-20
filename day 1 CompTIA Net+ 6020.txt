@@ -1,0 +1,47 @@
+!basic Network cibfug for all Cisco devices:
+enable
+conf t
+hostname CoreTAAS
+password pass
+service password-encryption
+no logging console
+no ip domain-lookup
+Line console 0
+pasword pass
+login
+exec-time-timeout 5 5
+line vty 0 14
+password pass
+login
+exec-timeout 5 5
+vlan 10
+name WIRELESSLAN
+exit
+vlan 50
+name CCTVNETWORK
+VLAN 100
+name IPTELEPHONY
+
+
+enable
+conf t
+hostname CoreBABA
+password pass
+service password-encryption
+no logging console
+no ip domain-lookup
+Line console 0
+pasword pass
+login
+exec-time-timeout 5 5
+line vty 0 14
+password pass
+login
+exec-timeout 5 5
+vlan 10
+name WIRELESSLAN
+exit
+vlan 50
+name CCTVNETWORK
+VLAN 100
+name IPTELEPHONY

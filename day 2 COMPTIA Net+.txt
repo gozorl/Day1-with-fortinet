@@ -1,0 +1,259 @@
+day 2
+
+all smart devices have ipv4/ipv6 ip address
+
+how to be smrt/not bobo
+
+pera:			ipv4			ipv6
+0-9			0-255			0-9,a-f
+
+
+4999			4.255.255.255		4fff
+5000			5.0.0.0			:5000:
+5001			5.0.0.1			5001
+
+6999			6.9.9.9			:6fff:
+7000			5.0.0.0			:5000:
+7001			7.0.0.1			70001
+
+  
+6899			6.254.255.255		6eff		
+6900			5.255.0.0		6f00
+6901			6.255.0.1		6f01
+
+
+2908			2.255.0.265		2f0e
+2909			2.255.0.255		2f0f
+2910			2.255.1.0		2f10
+
+task 2
+
+how to be hayup sa galing sa Cisco
+mayaman method: bili milyong tunay na gamit or CML
+
+bobo method: magtyaga sa pangit tracer
+
+tipid pero hayup method: rivan hayup lab: CML na walang bayad
+
+rm -rf /etc/udev/rules.d/70(tab)
+
+
+
+task 3: hayup level training" design and implement a complete network infra:
+
+GHQ: 10.50.0.0/16 - main network
+
+equal subnetting vs not equal subnetting
+CAi:				Csi:
+
+Equal Subnetting
+GHQ: 10.50.0.0/16 - subnet to 11 Divisions
+CAi - convertMO, addMO, IpasoksaHIWA:
+convertMO: 11 divisions --> 4bits
+
+addMO: .16+ /4 = /20: 3rd,16i
+IpasoksaHiwa: 
+1ID
+10.50.16.0 - 10.50.31.255
+2ID
+10.50.32.0 - 10.50.47.255
+3ID
+10.50.48.0 - 10.50.63.255
+4ID
+10.50.64.0 - 10.50.79.255
+5ID
+10.50.80.0 - 10.50.95.255
+6ID
+10.50.96.0 - 10.50.111.255
+7ID
+10.50.112.0 - 10.50.127.255
+
+Signal Regiment: 
+task3: via host: {csi} - convert, subtract, ipasok sa hiwa
+10.50.112.0/20
+convert: 2ipadd -->2bits
+subtrat: k/32 - /2 = /30 4th, 4i
+ipasoksa HIwa: 10.50.112.4/30
+ipasoksa HIwa: 10.50.112.4/30
+
+
+
+implementation of design
+CoreSW:
+Switch>en
+Switch#
+
+config terminal
+hostname CoreSWbaba
+enable secret pass
+service password-encryption
+no logging console
+no ip domain-lookup
+line console 0
+ password pass
+ login
+ exec-timeout 0 0
+line vty 0 14
+ password pass
+ login
+ exec-timeout 0 0
+interface vlan 1
+no shut
+ ip add 10.41.1.4 255.255.255.0
+ end
+wr
+
+TASK4: implement your design
+
+Signal regiment: 10.50.12.0/22
+CCNA 75 users
+convert: 75 users = 7 bits
+subtract: /32 - 7=/25, 4th, 128i
+insert: 10.50.12.128
+ist - 10.50.12.129 - .254
+last - 10.50.12.255
+
+conf t
+ip dhcp excluded-address 10.50.12.129 10.50.12.139
+ip dhcp pool SIGNREGIMENTccna
+ network 10.50.12.128 255.255.255.128
+ default-router 10.50.12.129
+ domain-name SRgmt.army.mil.ph
+ exit
+vlan 2
+ name SGNREGIMENTccna
+ exit
+int vlan 2 
+ no shut
+ ip add 10.50.12.129 255.255.255.128
+int Fa 0/5
+ switchport mode access
+ switchport access vlan 2
+end
+sh vlan brief
+
+
+scenario: can you implement on your own:
+SignRegiment 10.50.12.0 --> 12 users
+12 PARTICIPANTS: SR.harrisradio.com
+Convert: 12users = 4b
+Sub: /32-/4 = /28 -> 4th, 16i
+ipasok: 10.50.12.16/28
+network: 10.50.12.16/28
+1st: 10.50.12.17
+last: 10.50.12.31
+
+
+
+conf t
+ip dhcp excluded-address 10.50.12.16 10.50.12.20
+ip dhcp pool SR.harrisradio.com
+ network 10.50.12.16 255.255.255.240
+ default-router 10.50.12.17
+ domain-name SR.harrisradio.com
+ exit
+vlan 3
+ name SR.harrisradio.com
+ exit
+int vlan 3 
+ no shut
+ ip add 10.50.12.17 255.255.255.240
+int Fa 0/5
+ switchport mode access
+ switchport access vlan 3
+end
+sh vlan brief
+
+
+scenario: can you implement on your own:
+SignRegiment 10.50.12.0/22 --> 2 users
+2 PARTICIPANTS: israelcyber.gov.il
+Convert: 2users = 4b
+Sub: /32-/2 = /30 -> 4th, 4i
+ipasok: 10.50.12.4/30
+network: 10.50.12.4
+1st: 10.50.12.5
+last: 10.50.12.7
+
+conf t
+ip dhcp pool israelcyber.gov.il
+ network 10.50.12.4 255.255.255.252
+ default-router 10.50.12.5
+ domain-name israelcyber.gov.il
+ exit
+vlan 4
+ name israelcyber.gov.il
+ exit
+int vlan 4 
+ no shut
+ ip add 10.50.12.5 255.255.255.252
+int Fa 0/5
+ switchport mode access
+ switchport access vlan 4
+end
+sh vlan brief
+
+15 - 1 1 1 1
+14
+13
+12
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1 - 0 0 0 0
+
+
+8 4 2 1
+
+TASK5 - CONFIGURING IPV6 DHCP NETWORD SERVER:
+
+@C1
+
+conf t
+ipv6 unicast-routing
+ipv6 dhcp pool VLAN101IPV6-1
+ address prefix fafa:bebe:dada:caca::/64
+ dns-server 8:8:8::8
+ domain-name signalregimentv6.mil.ph 
+int vlan 10
+ ipv6 add fafa:bebe:dada:caca::f/64
+ ipv6 nd managed-config-flag
+ ipv6 dhcp server VLAN101IPV6-1
+end
+
+@A1
+
+conf t
+int e0/0
+ switchport mode access
+ switchport access vlan 10
+ do sh vlan brief
+
+@P1:
+
+conf t
+ipv6 unicast-routing
+int e0/0
+ no shut
+ ipv6 add dhcp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
